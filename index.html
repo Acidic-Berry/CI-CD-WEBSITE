@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malik | Cloud DevOps</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #134e4a, #10b981);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: white;
+  position: relative;
+}
+
+/* 🌌 Stars */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: twinkle infinite ease-in-out;
+}
+
+/* variety */
+.tiny { width: 1px; height: 1px; }
+.small { width: 2px; height: 2px; }
+.big {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 6px white, 0 0 12px #a7f3d0;
+}
+
+/* glow variation */
+.dim { opacity: 0.2; }
+.mid { opacity: 0.5; }
+.bright { opacity: 0.9; }
+
+@keyframes twinkle {
+  0%,100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* Canvas */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* Card */
+.card {
+  background: rgba(255,255,255,0.08);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  animation: float 4s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+
+.profile img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #10b981;
+  box-shadow: 0 0 20px rgba(16,185,129,0.7);
+}
+
+h1 { margin: 10px 0; }
+h3 { color: #a7f3d0; margin-bottom: 10px; }
+.skills { margin-top: 15px; color: #d1fae5; }
+
+</style>
+</head>
+
+<body>
+
+<div id="stars"></div>
+<canvas id="canvas"></canvas>
+
+<div class="card" id="card">
+  <div class="profile">
+    <img src="cat.png" onerror="this.src='https://placekitten.com/200/200'">
+  </div>
+
+  <h1>👋 Hello, I'm Malik</h1>
+  <h3>Aspiring Cloud DevOps Engineer</h3>
+
+  <p>
+    Adebowale Malik Adedeji, a Cloud DevOps in training,
+    TechCrush Cohort 6.
+  </p>
+
+  <div class="skills">
+    <strong>Skills:</strong> CI/CD • Cloud • Automation • Containers
+  </div>
+</div>
+
+<script>
+/* 🌌 ULTRA STARFIELD */
+const starContainer = document.getElementById('stars');
+
+const sizes = ['tiny','small','big'];
+const brightness = ['dim','mid','bright'];
+
+for (let i = 0; i < 420; i++) {
+  let star = document.createElement('div');
+
+  star.className = 'star ' +
+    sizes[Math.floor(Math.random()*sizes.length)] + ' ' +
+    brightness[Math.floor(Math.random()*brightness.length)];
+
+  star.style.left = Math.random()*100 + "vw";
+  star.style.top = Math.random()*100 + "vh";
+
+  star.style.animationDuration = (2 + Math.random()*5) + "s";
+  star.style.animationDelay = Math.random()*5 + "s";
+
+  starContainer.appendChild(star);
+}
+
+/* ☄️ COMET (unchanged, aligned above card) */
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let comet, trail;
+
+function resetComet() {
+  const rect = document.getElementById("card").getBoundingClientRect();
+  const arcHeight = rect.top - 60;
+
+  comet = {
+    x: canvas.width + 50,
+    y: canvas.height,
+    vx: -3,
+    vy: -Math.sqrt(2 * 0.25 * (canvas.height - arcHeight)),
+    gravity: 0.25
+  };
+
+  trail = [];
+}
+
+function drawComet() {
+  trail.forEach(t => {
+    ctx.beginPath();
+    ctx.arc(t.x, t.y, t.size, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(167,243,208,${t.alpha})`;
+    ctx.fill();
+  });
+
+  ctx.beginPath();
+  ctx.arc(comet.x, comet.y, 6, 0, Math.PI*2);
+  ctx.fillStyle = "#fff";
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(comet.x, comet.y, 14, 0, Math.PI*2);
+  ctx.fillStyle = "rgba(167,243,208,0.25)";
+  ctx.fill();
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  comet.x += comet.vx;
+  comet.y += comet.vy;
+  comet.vy += comet.gravity;
+
+  trail.push({
+    x: comet.x,
+    y: comet.y,
+    size: Math.random()*3 + 1,
+    alpha: 0.6
+  });
+
+  trail.forEach(t => t.alpha -= 0.02);
+  trail = trail.filter(t => t.alpha > 0);
+
+  drawComet();
+
+  if (comet.x < -100 || comet.y > canvas.height + 50) {
+    resetComet();
+  }
+}
+
+resetComet();
+animate();
+
+window.addEventListener("resize", () => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  resetComet();
+});
+</script>
+
+</body>
+</html>
