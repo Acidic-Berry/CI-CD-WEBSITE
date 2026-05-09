@@ -1,170 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Malik | Cloud DevOps</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malik | Cloud DevOps</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-    body {
-      height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #134e4a, #10b981);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      color: white;
-    }
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #134e4a, #10b981);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: white;
+  position: relative;
+}
 
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 40px;
-      border-radius: 20px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-      text-align: center;
-      width: 90%;
-      max-width: 420px;
-      animation: float 4s ease-in-out infinite;
-    }
+/* 🌌 Stars */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: twinkle infinite ease-in-out;
+}
 
-    /* Floating */
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-      100% { transform: translateY(0px); }
-    }
+/* variety */
+.tiny { width: 1px; height: 1px; }
+.small { width: 2px; height: 2px; }
+.big {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 6px white, 0 0 12px #a7f3d0;
+}
 
-    /* CAT IMAGE */
-    .profile img {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #10b981;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.7);
-      animation: glow 3s infinite;
-    }
+/* glow variation */
+.dim { opacity: 0.2; }
+.mid { opacity: 0.5; }
+.bright { opacity: 0.9; }
 
-    @keyframes glow {
-      0% { box-shadow: 0 0 10px #10b981; }
-      50% { box-shadow: 0 0 25px #34d399; }
-      100% { box-shadow: 0 0 10px #10b981; }
-    }
+@keyframes twinkle {
+  0%,100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
 
-    h1 {
-      font-size: 26px;
-      margin: 10px 0;
-    }
+/* Canvas */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
 
-    h3 {
-      font-size: 16px;
-      margin-bottom: 15px;
-      color: #a7f3d0;
-    }
+/* Card */
+.card {
+  background: rgba(255,255,255,0.08);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  animation: float 4s ease-in-out infinite;
+  z-index: 2;
+}
 
-    p {
-      font-size: 15px;
-      line-height: 1.6;
-    }
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
 
-    .skills {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #d1fae5;
-    }
+.profile img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #10b981;
+  box-shadow: 0 0 20px rgba(16,185,129,0.7);
+}
 
-    /* 👋 WAVE */
-    .wave {
-      display: inline-block;
-      animation: wave 2s infinite;
-      transform-origin: 70% 70%;
-    }
+h1 { margin: 10px 0; }
+h3 { color: #a7f3d0; margin-bottom: 10px; }
+.skills { margin-top: 15px; color: #d1fae5; }
 
-    @keyframes wave {
-      0% { transform: rotate(0deg); }
-      15% { transform: rotate(15deg); }
-      30% { transform: rotate(-10deg); }
-      45% { transform: rotate(15deg); }
-      60% { transform: rotate(-5deg); }
-      75% { transform: rotate(10deg); }
-      100% { transform: rotate(0deg); }
-    }
-
-    /* 🚀 Rocket + Fire */
-    .rocket-container {
-      display: inline-block;
-      position: relative;
-      animation: fly 2s ease-in-out infinite;
-    }
-
-    @keyframes fly {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0px); }
-    }
-
-    .fire {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: -12px;
-      width: 8px;
-      height: 15px;
-      background: orange;
-      border-radius: 50%;
-      animation: fire 0.3s infinite alternate;
-    }
-
-    @keyframes fire {
-      0% {
-        height: 10px;
-        background: orange;
-      }
-      100% {
-        height: 18px;
-        background: red;
-      }
-    }
-
-  </style>
+</style>
 </head>
 
 <body>
 
-  <div class="card">
+<div id="stars"></div>
+<canvas id="canvas"></canvas>
 
-    <!-- Real cat image -->
-    <div class="profile">
-      <img src="cat.png" alt="Coding Cat">
-    </div>
-
-    <h1><span class="wave">👋</span> Hello, I'm Malik</h1>
-
-    <h3>
-      <span class="rocket-container">
-        🚀
-      </span>
-      Aspiring Cloud DevOps Engineer
-    </h3>
-
-    <p>
-      My names are Adebowale Malik Adedeji, a Cloud DevOps in training,
-      currently learning at TechCrush Cohort 6.
-    </p>
-
-    <div class="skills">
-      <strong>Skills:</strong> CI/CD • Cloud Deployment • Automation • Containerization
-    </div>
-
+<div class="card" id="card">
+  <div class="profile">
+    <img src="cat.png" onerror="this.src='https://placekitten.com/200/200'">
   </div>
+
+  <h1>👋 Hello, I'm Malik</h1>
+  <h3>Aspiring Cloud DevOps Engineer</h3>
+
+  <p>
+    Adebowale Malik Adedeji, a Cloud DevOps in training,
+    TechCrush Cohort 6.
+  </p>
+
+  <div class="skills">
+    <strong>Skills:</strong> CI/CD • Cloud • Automation • Containers
+  </div>
+</div>
+
+<script>
+/* 🌌 ULTRA STARFIELD */
+const starContainer = document.getElementById('stars');
+
+const sizes = ['tiny','small','big'];
+const brightness = ['dim','mid','bright'];
+
+for (let i = 0; i < 420; i++) {
+  let star = document.createElement('div');
+
+  star.className = 'star ' +
+    sizes[Math.floor(Math.random()*sizes.length)] + ' ' +
+    brightness[Math.floor(Math.random()*brightness.length)];
+
+  star.style.left = Math.random()*100 + "vw";
+  star.style.top = Math.random()*100 + "vh";
+
+  star.style.animationDuration = (2 + Math.random()*5) + "s";
+  star.style.animationDelay = Math.random()*5 + "s";
+
+  starContainer.appendChild(star);
+}
+
+/* ☄️ COMET (unchanged, aligned above card) */
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let comet, trail;
+
+function resetComet() {
+  const rect = document.getElementById("card").getBoundingClientRect();
+  const arcHeight = rect.top - 60;
+
+  comet = {
+    x: canvas.width + 50,
+    y: canvas.height,
+    vx: -3,
+    vy: -Math.sqrt(2 * 0.25 * (canvas.height - arcHeight)),
+    gravity: 0.25
+  };
+
+  trail = [];
+}
+
+function drawComet() {
+  trail.forEach(t => {
+    ctx.beginPath();
+    ctx.arc(t.x, t.y, t.size, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(167,243,208,${t.alpha})`;
+    ctx.fill();
+  });
+
+  ctx.beginPath();
+  ctx.arc(comet.x, comet.y, 6, 0, Math.PI*2);
+  ctx.fillStyle = "#fff";
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(comet.x, comet.y, 14, 0, Math.PI*2);
+  ctx.fillStyle = "rgba(167,243,208,0.25)";
+  ctx.fill();
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  comet.x += comet.vx;
+  comet.y += comet.vy;
+  comet.vy += comet.gravity;
+
+  trail.push({
+    x: comet.x,
+    y: comet.y,
+    size: Math.random()*3 + 1,
+    alpha: 0.6
+  });
+
+  trail.forEach(t => t.alpha -= 0.02);
+  trail = trail.filter(t => t.alpha > 0);
+
+  drawComet();
+
+  if (comet.x < -100 || comet.y > canvas.height + 50) {
+    resetComet();
+  }
+}
+
+resetComet();
+animate();
+
+window.addEventListener("resize", () => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  resetComet();
+});
+</script>
 
 </body>
 </html>
